@@ -1,21 +1,32 @@
 <?php
-$filepath = "./file.zip";
-$fileurl = "http://localhost/ve_patcher/file.zip";
-$filemd5 = md5_file($filepath);
-$windowsexe = "VECY.exe";
-$osxexe = "VECY.app";
+$windows_data = array(
+    'file_path' => "./file_windows.zip",
+    'file_url' => "http://localhost/ve_patcher/file_windows.zip",
+    'exe' => "VECY.exe"
+);
+$osx_data = array(
+    'file_path' => "./file_osx.zip",
+    'file_url' => "http://localhost/ve_patcher/file_osx.zip",
+    'exe' => "VECY.app"
+);
+$clients = array(
+    $windows_data,
+    $osx_data,
+);
 $notice = "Hello\nWelcome everybody :)";
+$client_os = $_GET['os'];
 $client_md5 = $_GET['md5'];
+$client = $clients[$client_os];
+$file_md5 = md5_file($client['file_path']);
 $result = array(
     'updated' => true,
     'notice' => $notice,
-    'windowsexe' => $windowsexe,
-    'osxexe' => $osxexe);
-if ($filemd5 !== $client_md5)
+    'exe' => $client['exe']);
+if ($file_md5 !== $client_md5)
 {
     $result['updated'] = false;
-    $result['fileurl'] = $fileurl;
-    $result['filemd5'] = $filemd5;
+    $result['fileUrl'] = $client['file_url'];
+    $result['fileMd5'] = $file_md5;
 }
 echo json_encode($result);
 ?>
